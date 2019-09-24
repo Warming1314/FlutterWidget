@@ -1,11 +1,48 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyContainer());
+void main() => runApp(MyGridApp());
 
 // void main() => runApp(ListTestApp(
+//   //我们使用的是一个List传递，然后直接用List中的generate方法进行生产List里的元素。第一个参数是生生成的个数，第二个是方法。
 //   items: new List<String>.generate(100, (i)=>"Item $i"),
 // ));
 
+//网格列表组件
+//crossAxisSpacing ：网格间的空当，相当于每个网格之间的间距
+//crossAxisCount ：网格的列数，相当于一行放置的网格数量
+//childAspectRatio : 宽高比
+class MyGridApp extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new MaterialApp(
+          title: 'useless',
+          home: Scaffold(
+            appBar: AppBar(
+              title: new Text('网格'),
+            ),
+            body: GridView.count(
+              padding: const EdgeInsets.all(20.0),
+              crossAxisSpacing: 10.0,
+              crossAxisCount: 3,
+              childAspectRatio: 0.7,
+              children: <Widget>[
+                new Image.network('https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317335006,3693914419&fm=26&gp=0.jpg',fit: BoxFit.cover),
+                const Text('这是第一个'),
+                const Text('这是第二个'),
+                const Text('这是第三个'),
+                const Text('这是第四个'),
+                const Text('这是第五个'),
+                const Text('这是第六个'),
+                const Text('这是第七个'),
+              ],
+            ),
+          ),
+      );
+    }
+}
+
+//一个带数据源的列表
 class ListTestApp extends StatelessWidget {
    final List<String> items;
    //这是一个构造函数，除了Key 我们增加了一个必传的参数，这里的@required意思就是必传。：super如果父类没有无名无参数的默认构造函数，
@@ -17,13 +54,17 @@ class ListTestApp extends StatelessWidget {
         return MaterialApp(
           title: 'useless',
           home: Scaffold(
-            body: Center(
-              child: Container(
-                height: 200,
-                width: 100,
-                color: Colors.red,
-              ),
-            ),
+           appBar: AppBar(
+             title: new Text('带传入数据的列表'),
+           ),
+           body: new ListView.builder(
+             itemCount: items.length,
+             itemBuilder: (context, index){
+               return new ListTile(
+                 title: new Text('${items[index]}'),
+               );
+             },
+           )
           ),
         );
       }
@@ -219,7 +260,7 @@ class horizontalList extends StatelessWidget{
     }
 }
 
-//组件封装
+//MARK: 组件封装
 class MyList extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
