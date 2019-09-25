@@ -27,12 +27,16 @@ class FirstView extends StatelessWidget {
             title: new Text('第一个页面'),
           ),
           body: Center(
-            child: RaisedButton(
-              onPressed: (){
-                Navigator.push(context, new MaterialPageRoute(
-                  builder: (context)=>new SecondView()
-                ));
-              },
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                    Navigator.push(context, new MaterialPageRoute(
+                      builder: (context)=> new SecondPage()
+                    ));
+                  },
+                )
+              ],
             ),
           ),
         );
@@ -190,7 +194,9 @@ class SecondPage extends StatelessWidget {
                 onPressed: (){
                   Navigator.pop(context,'22222');
                 },
-              )
+              ),
+              Text('fffff'),
+              Image.asset('Images/WechatIMG18.jpeg')
             ],
           ),
         ),
