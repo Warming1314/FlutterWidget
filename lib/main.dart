@@ -1,11 +1,205 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGridApp());
+// void main() => runApp(FirstView());
 
 // void main() => runApp(ListTestApp(
 //   //我们使用的是一个List传递，然后直接用List中的generate方法进行生产List里的元素。第一个参数是生生成的个数，第二个是方法。
 //   items: new List<String>.generate(100, (i)=>"Item $i"),
 // ));
+
+//测试导航&跳转
+// void main(){
+//   runApp(MaterialApp(
+//   title: 'useless',
+//   home: new FirstView(),
+// ));
+// }
+
+//页面跳转
+//Navigator.push:是跳转到下一个页面，它要接受两个参数 一个是上下文context，另一个是跳转的函数
+//Navigator.pop:是返回到上一个页面，使用时传递一个context参数，使用时要注意的是，你必须是有上级页面的
+class FirstView extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+          appBar: AppBar(
+            title: new Text('第一个页面'),
+          ),
+          body: Center(
+            child: RaisedButton(
+              onPressed: (){
+                Navigator.push(context, new MaterialPageRoute(
+                  builder: (context)=>new SecondView()
+                ));
+              },
+            ),
+          ),
+        );
+    }
+}
+
+class SecondView extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+        appBar: AppBar(
+          title: new Text('第二个页面'),
+        ),
+        body: Center(
+          child: RaisedButton(
+            child: Text('返回'),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      );
+    }
+}
+
+//导航参数的传递和接受
+//声明数据结构类
+
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'useless',
+//     home: ProductList(
+//       proList: List.generate(20, (i)=>Product('商品 $i','这是一个商品，编号为：$i')),
+//     ),
+//   ));
+// }
+
+class Product {
+  final String title;
+  final String description;
+  Product(this.title, this.description);
+}
+
+class ProductList extends StatelessWidget {
+  final List<Product> proList;
+  ProductList({Key key, @required this.proList}):super(key:key);
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+          appBar: AppBar(
+            title: new Text('商品列表'),
+          ),
+          body: ListView.builder(
+            itemCount: proList.length,
+            itemBuilder: (context, index){
+              return ListTile(
+                title: Text(proList[index].title),
+                onTap: (){
+                    Navigator.push(context, new MaterialPageRoute(
+                      builder: (context)=> new ProductDetail(
+                        detail: proList[index],
+                      )
+                    ));
+                },
+              );
+            },
+          ),
+        );
+    }
+}
+//商品详情页
+class ProductDetail extends StatelessWidget {
+  final Product detail;
+  ProductDetail({Key key, @required this.detail}):super(key:key);
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+        appBar: AppBar(
+          title: new Text('商品详情'),
+        ),
+        body: Center(
+          child: Text('${detail.description}'),
+        ),
+      );
+    }
+}
+
+//页面跳转并返回数据
+//Dart中的异步请求和等待直接使用async...await
+void main() {
+  runApp(MaterialApp(
+    title: 'useless',
+    home: FirstPage(),
+  ));
+}
+
+class FirstPage extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+        appBar: AppBar(
+          title: new Text('页面跳转并返回数据'),
+        ),
+        body: Center(
+          child: RouteButton(),
+        ),
+      );
+    }
+}
+
+class RouteButton extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return RaisedButton(
+        onPressed: (){
+          _navigateToSecondPage(context);
+        },
+        child: Text('点击跳转'),
+      );
+    }
+
+    _navigateToSecondPage(BuildContext context) async{
+       final result = await Navigator.push(context, MaterialPageRoute(
+          builder: (context)=>new SecondPage()
+       ));
+
+       Scaffold.of(context).showSnackBar(SnackBar(content: Text('$result'),));
+    }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('第二个page'),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text('这是一个按钮'),
+                onPressed: (){
+                  Navigator.pop(context,'11111');
+                },
+              ),
+              RaisedButton(
+                child: Text('这是第二个按钮'),
+                onPressed: (){
+                  Navigator.pop(context,'22222');
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    }
+}
+
+
+//MARK-----------------------以下是控件---------------------------------------------------------------------------------
 
 //网格列表组件
 //crossAxisSpacing ：网格间的空当，相当于每个网格之间的间距
